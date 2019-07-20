@@ -13,9 +13,9 @@ from process_index import process_indexBR
 pr = 16
 
 databaseUser = "select_img_user"
-databasePW = "L3M4F"
+databasePW = "****"
 
-databaseServer = "177.105.35.20"
+databaseServer = "*****"
 databaseName = "equipe_geo"
 
 data_folder = r'C:\IMG_DOWNLOAD'
