@@ -94,8 +94,11 @@ def get_arcad(conn,uf,shp_folder):
     defn = out_lyr.GetLayerDefn()
     for feat in arcadLay:
         geom0 = feat.geometry()
-        geom1 = geom0.Buffer(0)
-        geom = geom1.Simplify(0.0001).Buffer(0)
+        geom1 = make_valid_pols(geom0)
+        geom2 = geom1.Simplify(0.0001)
+        geom = make_valid_pols(geom2)
+        if geom == None:
+            continue
         out_feat = ogr.Feature(defn)
         out_feat.SetGeometry(geom)
         out_lyr.CreateFeature(out_feat)
@@ -103,7 +106,36 @@ def get_arcad(conn,uf,shp_folder):
     out_lyr = None
     out_ds = None
 
+def make_valid_pols(geom0):
 
+    print('making valid')
+    geom = geom0.Buffer(0)
+    if geom.GetGeometryType() == ogr.wkbGeometryCollection:
+        print('geom_col')
+        multi = ogr.Geometry(ogr.wkbMultiPolygon)
+        for pol in geom:
+            if pol.GetGeometryType() in  [ogr.wkbMultiPolygon,ogr.wkbPolygon]:
+                print('adding geom to multi')
+                if pol.GetArea()>0:
+                    multi.AddGeometryDirectly(pol)
+            else:
+                print('geom not polygon')
+                pass
+        if multi.GetArea() > 0:
+            print('multi>0')
+            geom1 = multi.Buffer(0)
+        else:
+            print('multi=0')
+            return None
+    else:
+        geom1 = geom
+    if geom1.GetGeometryType() in  [ogr.wkbMultiPolygon,ogr.wkbPolygon]:
+        if geom1.GetArea() > 0:
+            return ogr.ForceToMultiPolygon(geom1)
+        else:
+            return None
+    else:
+        return None
 def get_output_fname(fname, new_suffix):
     fparts = fname.split('.')
     if len(fparts[-1]) == 3:
