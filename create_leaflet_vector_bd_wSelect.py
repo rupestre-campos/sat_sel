@@ -351,7 +351,7 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
     #new_tag = soup.new_tag('input', name="tileId",  size="250", **{'type':'text'})
     tag_div1.insert(1,new_tag)
     new_tag = soup.new_tag('label', **{'for':'2017'})
-    new_tag.string = '2016'
+    new_tag.string = '2017'
     tag_div1.insert(2,new_tag)
 
     new_tag = Tag(builder=soup.builder,

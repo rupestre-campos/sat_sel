@@ -93,8 +93,8 @@ class myHandler(BaseHTTPRequestHandler):
 				outfolder= os.path.join(data_folder,'preview')
 				print('got {} {} {} {} {} {}'.format(tile_id,pre_fix_date,initial_date,final_date,max_cloud,max_tile))
 				if pre_fix_date[0] == "2017":
-					initial_date = '2016-01-01'
-					final_date = '2016-12-31'
+					initial_date = '2017-01-01'
+					final_date = '2017-12-31'
 					db_col = 'd_2017'
 				elif pre_fix_date[0] == "2018":
 					initial_date = '2018-01-01'
