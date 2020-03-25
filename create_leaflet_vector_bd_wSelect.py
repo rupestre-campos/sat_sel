@@ -322,7 +322,7 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
 
     m = folium.Map(location=[ loc[1], loc[0]],height='70%',tiles='Stamen Toner',zoom_start=6)
     if not geojson_arcad == None:
-        geojson = folium.GeoJson(geojson_arcad,style_function=style_function_arcad,name='area cadastravel')
+        geojson = folium.GeoJson(geojson_arcad,name='area cadastravel')
         geojson.add_to(m)
     geojson = folium.GeoJson(geojson_grid,style_function=style_function,highlight_function=highlight_function,name='grid sattelite')
     #m.add_child(fg)
