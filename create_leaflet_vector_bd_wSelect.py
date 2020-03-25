@@ -34,7 +34,7 @@ def get_layers_from_search(conn,ar_cad,uf,sat):
     satLay.SetSpatialFilter(multi)
     return satLay,multi,loc
 
-def create_grid_sat_shp(shp_folder,satLay,multi):	
+def create_grid_sat_shp(shp_folder,satLay,multi):
     output = os.path.join(shp_folder,'sat.shp')
     if os.path.isfile(output):
         call('del /q {}'.format(output),shell=True)
@@ -99,7 +99,7 @@ def get_arcad(uf,shp_folder):
         out_lyr.CreateFeature(out_feat)
         out_feat = None
     out_lyr = None
-    out_ds = None					
+    out_ds = None
 
 
 def get_output_fname(fname, new_suffix):
@@ -194,7 +194,7 @@ def convert_shp_to_geojson(shape_fname):
         msgx('File not found: %s' % shape_fname)
 
     # Read the shapefile
-    try: 
+    try:
         reader = shapefile.Reader(shape_fname)
     except:
         msgx('Failed to read shapefile: %s' % shape_fname)
@@ -215,7 +215,7 @@ def convert_shp_to_geojson(shape_fname):
 
     geojson = open(out_fname, "w")
     geojson.write(json.dumps({"type": "FeatureCollection","features": output_buffer}, indent=2))
-    geojson.close()    
+    geojson.close()
     msg('file written: %s' % out_fname)
 
     return out_fname
@@ -256,7 +256,7 @@ def style_function_arcad(feature):
         }
 
 def highlight_function(feature):
-    
+
     high = {'fillColor': '#ffaf00',
         'color': 'green',
         'weight': 3,
@@ -264,7 +264,7 @@ def highlight_function(feature):
     return high
 
 def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
-    """Using folium, make an HTML page using GEOJSON input 
+    """Using folium, make an HTML page using GEOJSON input
         examples: https://github.com/wrobstory/folium
 
     :param geojson_grid: full file path to a GEO JSON file
@@ -273,7 +273,7 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
     if not os.path.isfile(geojson_grid):
         msgx('File not found: %s' % geojson_grid)
 
-    # Boston 
+    # Boston
     '''
     fg = folium.FeatureGroup(name="tiles")
     with open(geojson_grid) as geojson:
@@ -326,8 +326,8 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
     new_tag = soup.new_tag('div', **{'class':'field','style':'font-weight: bold;font-size: 13px;'})
     new_tag.string = "Tile ID:"
     tag_form.insert(1,new_tag)
-    new_tag = Tag(builder=soup.builder, 
-               name='input', 
+    new_tag = Tag(builder=soup.builder,
+               name='input',
                attrs={'name':'tile_id','id':'tile_id','size':'25','type':'text'})
     #new_tag = soup.new_tag('input', name="tileId",  size="250", **{'type':'text'})
     tag_form.insert(2,new_tag)
@@ -340,22 +340,22 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
     new_tag = soup.new_tag('div', **{'class':'field','style':'font-weight: bold;font-size: 13px;'})
     new_tag.string = "Fixed Date:"
     tag_form.insert(4,new_tag)
-    
+
     new_tag = soup.new_tag('div1')
 
     tag_form.insert(5,new_tag)
     tag_div1 = soup.div1
-    new_tag = Tag(builder=soup.builder, 
-               name='input', 
+    new_tag = Tag(builder=soup.builder,
+               name='input',
                attrs={'name':'f_date','id':'2017','value':'2017','type':'radio'})
     #new_tag = soup.new_tag('input', name="tileId",  size="250", **{'type':'text'})
     tag_div1.insert(1,new_tag)
     new_tag = soup.new_tag('label', **{'for':'2017'})
     new_tag.string = '2016'
     tag_div1.insert(2,new_tag)
-    
-    new_tag = Tag(builder=soup.builder, 
-               name='input', 
+
+    new_tag = Tag(builder=soup.builder,
+               name='input',
                attrs={'name':'f_date','id':'2018','value':'2018','type':'radio'})
     #new_tag = soup.new_tag('input', name="tileId",  size="250", **{'type':'text'})
     tag_div1.insert(3,new_tag)
@@ -363,8 +363,8 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
     new_tag.string = '2018'
     tag_div1.insert(4,new_tag)
 
-    new_tag = Tag(builder=soup.builder, 
-               name='input', 
+    new_tag = Tag(builder=soup.builder,
+               name='input',
                attrs={'name':'f_date','id':'2019','value':'2019','type':'radio'})
     #new_tag = soup.new_tag('input', name="tileId",  size="250", **{'type':'text'})
     tag_div1.insert(5,new_tag)
@@ -372,8 +372,8 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
     new_tag.string = '2019'
     tag_div1.insert(6,new_tag)
 
-    new_tag = Tag(builder=soup.builder, 
-               name='input', 
+    new_tag = Tag(builder=soup.builder,
+               name='input',
                attrs={'name':'f_date','id':'other','value':'other','type':'radio'})
     #new_tag = soup.new_tag('input', name="tileId",  size="250", **{'type':'text'})
     tag_div1.insert(7,new_tag)
@@ -386,9 +386,9 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
     tag_div1.insert(9,new_tag)
 
 
-    new_tag = Tag(builder=soup.builder, 
-               name='input', 
-               attrs={'name':'initial_date','id':'initial_date','type':'date'})    
+    new_tag = Tag(builder=soup.builder,
+               name='input',
+               attrs={'name':'initial_date','id':'initial_date','type':'date'})
     tag_div1.insert(10,new_tag)
 
 
@@ -397,28 +397,28 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
     tag_div1.insert(11,new_tag)
 
 
-    new_tag = Tag(builder=soup.builder, 
-               name='input', 
-               attrs={'name':'final_date','id':'final_date','type':'date'})    
+    new_tag = Tag(builder=soup.builder,
+               name='input',
+               attrs={'name':'final_date','id':'final_date','type':'date'})
     tag_div1.insert(12,new_tag)
 
     new_tag = soup.new_tag('div', **{'class':'field','style':'font-weight: bold;'})
     new_tag.string = 'Maximum cloud percent:'
     tag_form.insert(6,new_tag)
 
-    new_tag = Tag(builder=soup.builder, 
-               name='input', 
-               attrs={'name':'max_cloud','id':'max_cloud','type':'text'})    
+    new_tag = Tag(builder=soup.builder,
+               name='input',
+               attrs={'name':'max_cloud','id':'max_cloud','type':'text'})
     tag_form.insert(7,new_tag)
 
     new_tag = soup.new_tag('div', **{'class':'field','style':'font-weight: bold;'})
     new_tag.string = 'Maximum number of results:'
     tag_form.insert(8,new_tag)
 
-    new_tag = Tag(builder=soup.builder, 
-               name='input', 
-               attrs={'name':'max_tile','id':'max_tile','type':'text'})    
-    tag_form.insert(9,new_tag)   
+    new_tag = Tag(builder=soup.builder,
+               name='input',
+               attrs={'name':'max_tile','id':'max_tile','type':'text'})
+    tag_form.insert(9,new_tag)
 
     tag_script = soup.find_all('script')[-1]
 
@@ -442,7 +442,7 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
         n+= 1
 
     tag_script.string = '\n'.join(tag_list[1:-1])
-        
+
 
 
 
@@ -453,7 +453,7 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
 def create_leaf_page(arcad,loc):
     shp_grid = r"C:\IMG_DOWNLOAD\shp\sat.shp"
     shp_arcad = r"C:\IMG_DOWNLOAD\shp\arcad.shp"
-    geojson_grid = convert_shp_to_geojson(shp_grid) 
+    geojson_grid = convert_shp_to_geojson(shp_grid)
     if arcad == '1':
         geojson_arcad = convert_shp_to_geojson(shp_arcad)
     else:

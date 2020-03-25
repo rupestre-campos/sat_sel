@@ -27,7 +27,7 @@ def downloadSentinel(tileid,cloud_limit,tile_limit,startdate,enddate,outfolder,p
     tilefuso = tileid[0:2]
     single_letter = tileid[2:3]
     double_letter = tileid[3:]
-    file_name = r"C:\IMG_DOWNLOAD\index\sentinel_filtered_dataframev3.pickle"
+    file_name = "/home/rupestre/IMG_DOWNLOAD/index/sentinel_filtered_dataframev3.pickle"
     df = pd.read_pickle(file_name)
     tile_id = '{}_{}_{}'.format(tilefuso,single_letter,double_letter)
     start = datetime.strptime(startdate, '%Y-%m-%d')
@@ -72,7 +72,7 @@ def downloadSentinel(tileid,cloud_limit,tile_limit,startdate,enddate,outfolder,p
                     print('already downloaded')
                     continue
                 url = preview_url
-            
+
             download_scenes.append((url,out_tile_folder))
         if len(download_scenes)> 0:
             proc = len(download_scenes)
@@ -85,7 +85,7 @@ def downloadSentinel(tileid,cloud_limit,tile_limit,startdate,enddate,outfolder,p
         return [out_tile_folder,image_list]
         print('could not find any scene with that criteria')
 
-    
+
     #scenes = stack_sentinel(tilefuso,bands,outfolder)
     #print '\n scenes dictionary'
     #print scenes
@@ -112,7 +112,7 @@ def download_parallel(data):
 def main():
     driver = ogr.GetDriverByName('ESRI Shapefile')
     dataSource = driver.Open(grid_sentinel, 0) # 0 means read-only. 1 means writeable
-    layer = dataSource.GetLayer()   
+    layer = dataSource.GetLayer()
     for feature in layer:
         tile = feature.GetField('tile_id')
         tile_fuso = tile[0:2]
