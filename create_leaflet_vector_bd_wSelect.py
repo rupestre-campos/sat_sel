@@ -458,7 +458,7 @@ def create_leaf_page(shp_folder,arcad,loc):
         geojson_arcad = convert_shp_to_geojson(shp_arcad)
     else:
         geojson_arcad = None
-    make_leaflet_page(geojson_grid,geojson_arcad, "/home/rupestre/IMG_DOWNLOAD/grid_sat.html",loc)
+    make_leaflet_page(geojson_grid,geojson_arcad, "grid_sat.html",loc)
 
 
 if __name__=='__main__':
