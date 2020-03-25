@@ -49,7 +49,11 @@ class myHandler(BaseHTTPRequestHandler):
 			if self.path.startswith("/update_index"):
 				process_indexBR(data_folder,databaseServer,databaseName,databaseUser,databasePW)
 				self.path="/index.html"
-				self.wfile.write('Your sentinel index has just been updated! Return and select your images')
+				self.wfile.write('<html>')
+				self.wfile.write('  <head>')
+				self.wfile.write('		<meta http-equiv="refresh" content="0;url={}" />'.format(self.path))
+				self.wfile.write('  </head>')
+				self.wfile.write('</html>')
 
 			if self.path.startswith("/gen_map"):
 				if not self.path.endswith('update'):

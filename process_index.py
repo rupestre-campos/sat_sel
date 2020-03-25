@@ -100,10 +100,11 @@ def process_indexBR(data_folder,host,db,usr,pw):
     df['SENSING_TIME'] = df.apply(lambda row: row['SENSING_TIME'][:-5], axis=1)
     df['SENSING_TIME'] =  pd.to_datetime(df['SENSING_TIME'])
 
-
+    print('saving to filtered')
     file_name = os.path.join(out_index,'sentinel_filtered_dataframev3.pickle')
     df.to_pickle(file_name)
     conn = None
-
+    print('finished')
+    
 if __name__ == "__main__":
     main()
