@@ -19,6 +19,7 @@ databaseServer = "177.105.35.20"
 databaseName = "equipe_geo"
 
 data_folder = '/home/rupestre/IMG_DOWNLOAD'
+shp_folder = os.path.join(data_folder,'shp')
 
 PORT_NUMBER = 8080
 
@@ -64,7 +65,7 @@ class myHandler(BaseHTTPRequestHandler):
 					ar_cad = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('arcad', None)
 				print sat,uf,ar_cad
 
-				shp_folder = os.path.join(data_folder,'shp')
+
 				connString = "PG: host=%s dbname=%s user=%s password=%s" %(databaseServer,databaseName,databaseUser,databasePW)
 				conn = ogr.Open(connString)
 				satLay,multi,loc = get_layers_from_search(conn,ar_cad,uf,sat)
