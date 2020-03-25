@@ -451,7 +451,7 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
         f_output.write(soup.prettify("utf-8"))
 
 def create_leaf_page(arcad,loc):
-    shp_grid = "home/rupestre/IMG_DOWNLOAD/shp/sat.shp"
+    shp_grid = "/home/rupestre/IMG_DOWNLOAD/shp/sat.shp"
     shp_arcad = "/home/rupestre/IMG_DOWNLOAD/shp/arcad.shp"
     geojson_grid = convert_shp_to_geojson(shp_grid)
     if arcad == '1':
