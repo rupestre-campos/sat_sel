@@ -50,7 +50,7 @@ def getCenter(ext):
     yc = float(sum(y))/len(y)
     return (xc,yc)
 
-def preview_to_new_map(img_list,ar_cad):
+def preview_to_new_map(img_list,ar_cad,data_folder):
     ds = gdal.Open(img_list[0])
     gt = ds.GetGeoTransform()
     cols = ds.RasterXSize
@@ -65,7 +65,7 @@ def preview_to_new_map(img_list,ar_cad):
     m = folium.Map(location=[center[1],center[0]], height='90%', zoom_start = 10,tiles=tiles)
     #tiles='Stamen Toner'
     #if len(img_list) >1:
-            
+
     for imgn in img_list:
         print imgn
         imgn_name = imgn.split('\\')[-1]
@@ -81,8 +81,8 @@ def preview_to_new_map(img_list,ar_cad):
         print coords
         folium.raster_layers.ImageOverlay(name=imgn_name,image=imgn,interactive=True,bounds=coords).add_to(m)
     if ar_cad == '1':
-        shp_arcad = r"C:\IMG_DOWNLOAD\shp\arcad.shp"
-        geojson_arcad = os.path.join(shp_arcad.replace('.shp', '.json'))    
+        shp_arcad = os.path.join(data_folder,"arcad.shp")
+        geojson_arcad = os.path.join(shp_arcad.replace('.shp', '.json'))
         geojson = folium.GeoJson(geojson_arcad,style_function=style_function_arcad,name='area cadastravel',overlay=False)
         geojson.add_to(m)
     '''
@@ -104,7 +104,7 @@ def preview_to_new_map(img_list,ar_cad):
     '''
     m.add_child(folium.LayerControl())
     outHtml = 'tiles_preview.html'
-    call('del {}'.format(outHtml),shell=True)
+    call('rm {}'.format(outHtml),shell=True)
     m.save(outHtml)
 
 
@@ -123,20 +123,20 @@ def preview_to_new_map(img_list,ar_cad):
     new_tag = soup.new_tag('form',action="/fulldownload", method="get")
     tag.insert(2,new_tag)
     tag_form = soup.form
-    
+
 
     new_tag = soup.new_tag('div', **{'class':'field'})
     new_tag.string = "SELECTED Images :"
     tag_form.insert(1,new_tag)
-    new_tag = Tag(builder=soup.builder, 
-               name='input', 
+    new_tag = Tag(builder=soup.builder,
+               name='input',
                attrs={'name':'tile_id','id':'tile_id','size':'250','type':'text'})
     #new_tag = soup.new_tag('input', name="tileId",  size="250", **{'type':'text'})
     tag_form.insert(2,new_tag)
 
     new_tag = soup.new_tag('input', value="Write Tile ID", **{'type':'submit'})
     tag_form.insert(3,new_tag)
-    
+
     click_function = '''
     function clickHandler(e) {
         var lay = [];
@@ -167,7 +167,7 @@ def preview_to_new_map(img_list,ar_cad):
     tag_script = soup.find_all('script')[-1]
     tag_script.append(click_function)
     with open(outHtml, "wb") as f_output:
-        f_output.write(soup.prettify("utf-8")) 
+        f_output.write(soup.prettify("utf-8"))
 
 def main():
     pass

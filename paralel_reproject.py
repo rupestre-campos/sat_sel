@@ -28,8 +28,8 @@ def reproject_to_4326(imgs):
         if not os.path.isfile('{}.png'.format(out_img[:-4])):
             call('gdalwarp -q -t_srs epsg:4326 -tr 0.005 0.005 -r cubic {} {}'.format(img_p,out_img),shell=True)
             call('gdal_translate -q -of PNG -a_nodata 0 {} {}'.format(out_img,'{}.png'.format(out_img[:-4])),shell=True)
-            call('del {}'.format(img_p),shell=True)
-            call('del {}'.format(out_img),shell=True)
+            call('rm {}'.format(img_p),shell=True)
+            call('rm {}'.format(out_img),shell=True)
     except Exception as e:
         print(e)
 

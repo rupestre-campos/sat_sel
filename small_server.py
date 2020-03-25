@@ -113,7 +113,7 @@ class myHandler(BaseHTTPRequestHandler):
 					print('search resulted in {}'.format(out_tiles))
 					out_tiles = paralel_img_processing(out_tiles[1],pr)
 					print('process resulted in {}'.format(out_tiles))
-					preview_to_new_map(out_tiles,ar_cad[0])
+					preview_to_new_map(out_tiles,ar_cad[0],shp_folder)
 					print('map preview generated')
 					#self.path="/tiles_preview.html"
 					self.send_response(200)
