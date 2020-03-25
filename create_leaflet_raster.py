@@ -66,7 +66,7 @@ def preview_to_new_map(img_list,ar_cad,data_folder):
     #tiles='Stamen Toner'
     #if len(img_list) >1:
     n=0
-    show = True
+    show = False
 
     for imgn in img_list:
         print imgn
@@ -81,10 +81,11 @@ def preview_to_new_map(img_list,ar_cad,data_folder):
         #    img_rio = src.read()
         coords = [[i[1],i[0]] for i in ext]
         print coords
-        if n >0:
-            show = False
-        folium.raster_layers.ImageOverlay(name=imgn_name,image=imgn,interactive=True,bounds=coords,show=show).add_to(m)
         n+=1
+        if n == len(img_list):
+            show = True
+        folium.raster_layers.ImageOverlay(name=imgn_name,image=imgn,interactive=True,bounds=coords,show=show).add_to(m)
+        
 
     if ar_cad == '1':
         shp_arcad = os.path.join(data_folder,"arcad.shp")
