@@ -90,7 +90,7 @@ def get_arcad(conn,uf,shp_folder):
     if os.path.isfile(output):
         call('rm {}'.format(output),shell=True)
     out_ds = drv.CreateDataSource(output)
-    out_lyr = out_ds.CreateLayer(output, arcadLay.GetSpatialRef(),arcadLay.GetGeomType())
+    out_lyr = out_ds.CreateLayer(output, arcadLay.GetSpatialRef(),ogr.wkbMultiPolygon)
     defn = out_lyr.GetLayerDefn()
     for feat in arcadLay:
         geom0 = feat.geometry()
