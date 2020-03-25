@@ -28,7 +28,7 @@ def process_indexBR():
     download_index(url,out_index)
     index_csv = extract_gz(out_index)
     f = open(index_csv)
-    outfolder = '\\'.join(index_csv.split('\\')[:-1])
+    
     databaseUser = "ckc"
     databasePW = "garrafadecafe"
 
@@ -73,7 +73,7 @@ def process_indexBR():
                 #print(line)
             #print(n,'\t-\t',data[1])
 
-    output_pickle_file = os.path.join(outfolder,'sentinel_index.pickle')
+    output_pickle_file = os.path.join(out_index,'sentinel_index.pickle')
     p = open(output_pickle_file, 'wb')
     pickle.dump(sentinelBR, p, pickle.HIGHEST_PROTOCOL)
     p.close()
@@ -106,7 +106,7 @@ def process_indexBR():
     df['SENSING_TIME'] =  pd.to_datetime(df['SENSING_TIME'])
 
 
-    file_name = os.path.join(outfolder,'sentinel_filtered_dataframev3.pickle')
+    file_name = os.path.join(out_index,'sentinel_filtered_dataframev3.pickle')
     df.to_pickle(file_name)
 
 if __name__ == "__main__":
