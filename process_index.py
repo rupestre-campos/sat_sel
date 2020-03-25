@@ -72,6 +72,7 @@ def process_indexBR(data_folder,host,db,usr,pw):
     p = open(output_pickle_file, 'wb')
     pickle.dump(sentinelBR, p, pickle.HIGHEST_PROTOCOL)
     p.close()
+    print('creating pandas df')
 
     import pandas as pd
 
@@ -87,7 +88,7 @@ def process_indexBR(data_folder,host,db,usr,pw):
 
     i = 0
     for tileId in save:
-        print(tileId)
+        #print(tileId)
         for productId in save[tileId]:
             info = save[tileId][productId]
             rowList = [tileId,productId,info['GRANULE_ID'],info['SENSING_TIME'],info['CLOUD_COVER'],info['GEOMETRIC_QUALITY'],info['NORTH_LAT'],info['SOUTH_LAT'],info['WEST_LON'],info['EAST_LON'],info['TOTAL_SIZE'],info['BASE_URL']]
@@ -105,6 +106,6 @@ def process_indexBR(data_folder,host,db,usr,pw):
     df.to_pickle(file_name)
     conn = None
     print('finished')
-    
+
 if __name__ == "__main__":
     main()

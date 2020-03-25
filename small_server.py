@@ -48,6 +48,8 @@ class myHandler(BaseHTTPRequestHandler):
 				sendReply = True
 			if self.path.startswith("/update_index"):
 				process_indexBR(data_folder,databaseServer,databaseName,databaseUser,databasePW)
+				self.send_response(200)
+				self.end_headers()
 				self.path="/index.html"
 				self.wfile.write('<html>')
 				self.wfile.write('  <head>')
