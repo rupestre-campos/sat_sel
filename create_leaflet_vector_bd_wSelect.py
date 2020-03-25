@@ -110,24 +110,24 @@ def get_arcad(conn,uf,shp_folder):
 
 def make_valid_pols(geom0):
 
-    print('making valid')
+    #print('making valid')
     geom = geom0.Buffer(0)
     if geom.GetGeometryType() == ogr.wkbGeometryCollection:
-        print('geom_col')
+        #print('geom_col')
         multi = ogr.Geometry(ogr.wkbMultiPolygon)
         for pol in geom:
             if pol.GetGeometryType() in  [ogr.wkbMultiPolygon,ogr.wkbPolygon]:
-                print('adding geom to multi')
+                #print('adding geom to multi')
                 if pol.GetArea()>0:
                     multi.AddGeometryDirectly(pol)
             else:
-                print('geom not polygon')
+                #print('geom not polygon')
                 pass
         if multi.GetArea() > 0:
-            print('multi>0')
+            #print('multi>0')
             geom1 = multi.Buffer(0)
         else:
-            print('multi=0')
+            #print('multi=0')
             return None
     else:
         geom1 = geom
