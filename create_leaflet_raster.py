@@ -68,7 +68,7 @@ def preview_to_new_map(img_list,ar_cad,data_folder):
 
     for imgn in img_list:
         print imgn
-        imgn_name = imgn.split('\\')[-1]
+        imgn_name = os.path.basename(imgn)
         ds = gdal.Open(imgn)
         gt = ds.GetGeoTransform()
         cols = ds.RasterXSize
