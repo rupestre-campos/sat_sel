@@ -63,7 +63,7 @@ class myHandler(BaseHTTPRequestHandler):
 				conn = ogr.Open(connString)
 				satLay,multi,loc = get_layers_from_search(conn,ar_cad,uf,sat)
 				create_grid_sat_shp(shp_folder,satLay,multi)
-				create_leaf_page(ar_cad[0],loc)
+				create_leaf_page(shp_folder,ar_cad[0],loc)
 				conn = None
 				self.send_response(200)
 				self.end_headers()
