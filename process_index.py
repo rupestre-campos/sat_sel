@@ -22,7 +22,7 @@ def download_index(url,out_index):
 
 
 def process_indexBR(data_folder,host,db,usr,pw):
-    out_index = os.path.join('index')
+    out_index = os.path.join(data_folder,'index')
     url = 'gs://gcp-public-data-sentinel-2/index.csv.gz'
 
     download_index(url,out_index)
