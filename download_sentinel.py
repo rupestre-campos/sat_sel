@@ -80,7 +80,8 @@ def downloadSentinel(data_folder,tileid,cloud_limit,tile_limit,startdate,enddate
                 proc = pr
             parallelMother(download_scenes,proc)
             print('download complete')
-        return [out_tile_folder,image_list]
+
+        return [out_tile_folder,image_list.reverse()]
     else:
         return [out_tile_folder,image_list]
         print('could not find any scene with that criteria')
