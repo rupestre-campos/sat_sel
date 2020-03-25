@@ -48,7 +48,7 @@ def process_indexBR():
         fuse = tileId[:2]
         single_letter = tileId[2:3]
         double_letter = tileId[3:]
-        print(fuse,single_letter,double_letter)
+        #print(fuse,single_letter,double_letter)
         key = '{}_{}_{}'.format(fuse,single_letter,double_letter)
         sentinelBR[key] = {}
 
@@ -69,8 +69,9 @@ def process_indexBR():
             sentinelBR[key][data[1]] = {'GRANULE_ID':data[0],'PRODUCT_ID':data[1],'SENSING_TIME':data[4],'TOTAL_SIZE':data[5],'CLOUD_COVER':data[6],'GEOMETRIC_QUALITY':data[7],'NORTH_LAT':data[9],'SOUTH_LAT':data[10],'WEST_LON':data[11],'EAST_LON':data[12],'BASE_URL':data[13]}
             n += 1
             if data[1] == '':
-                print(line)
-            print(n,'\t-\t',data[1])
+                pass
+                #print(line)
+            #print(n,'\t-\t',data[1])
 
     output_pickle_file = os.path.join(outfolder,'sentinel_index.pickle')
     p = open(output_pickle_file, 'wb')
