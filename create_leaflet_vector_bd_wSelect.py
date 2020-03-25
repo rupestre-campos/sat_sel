@@ -20,7 +20,7 @@ def get_layers_from_search(conn,ar_cad,uf,sat,shp_folder):
     satLay = conn.GetLayer('monitoramento_kfw.grid_sat')
     brLay = conn.GetLayer('monitoramento_kfw.br_estados_ibge_2015')
     if ar_cad[0] == '1':
-        get_arcad(uf[0],shp_folder)
+        get_arcad(conn,uf[0],shp_folder)
     brLay.SetAttributeFilter("uf = '{}'".format(uf[0].upper()))
     n=0
     multi = ogr.Geometry(ogr.wkbMultiPolygon)
@@ -78,7 +78,7 @@ def create_grid_sat_shp(shp_folder,satLay,multi):
     out_lyr = None
     out_ds = None
 
-def get_arcad(uf,shp_folder):
+def get_arcad(conn,uf,shp_folder):
     drv = ogr.GetDriverByName("ESRI Shapefile")
     uf = uf.upper()
     arcadLay = conn.GetLayer('monitoramento_kfw.area_cadastravel')
@@ -93,7 +93,9 @@ def get_arcad(uf,shp_folder):
     out_lyr = out_ds.CreateLayer(output, arcadLay.GetSpatialRef(),arcadLay.GetGeomType())
     defn = out_lyr.GetLayerDefn()
     for feat in arcadLay:
-        geom = feat.geometry()
+        geom0 = feat.geometry()
+        geom1 = geom0.Buffer(0)
+        geom = geom1.Simplify(0.0001).Buffer(0)
         out_feat = ogr.Feature(defn)
         out_feat.SetGeometry(geom)
         out_lyr.CreateFeature(out_feat)
