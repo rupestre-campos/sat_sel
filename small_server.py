@@ -47,7 +47,7 @@ class myHandler(BaseHTTPRequestHandler):
 				mimetype='text/html'
 				sendReply = True
 			if self.path.startswith("/update_index"):
-				process_indexBR()
+				process_indexBR(data_folder,databaseServer,databaseName,databaseUser,databasePW)
 				self.path="/index.html"
 				self.wfile.write('Your sentinel index has just been updated! Return and select your images')
 
@@ -102,7 +102,7 @@ class myHandler(BaseHTTPRequestHandler):
 					final_date = final_date[0]
 					db_col = 'img_down'
 
-				out_tiles = downloadSentinel(tile_id[0],int(max_cloud[0]),int(max_tile[0]),initial_date,final_date,outfolder,True,pr)
+				out_tiles = downloadSentinel(data_folder,tile_id[0],int(max_cloud[0]),int(max_tile[0]),initial_date,final_date,outfolder,True,pr)
 				if not len(out_tiles[1]) == 0:
 					print('search resulted in {}'.format(out_tiles))
 					out_tiles = paralel_img_processing(out_tiles[1],pr)

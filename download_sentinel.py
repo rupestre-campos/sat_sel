@@ -22,12 +22,12 @@ stTile = re.compile(r'(?i)[12][0-589][H-N][B-HK-NP-RT-VW-Z][A-HJ-NP-V]')
 
 #stDate = re.compile(r'201[6789][01]\d[0123]\d')
 
-def downloadSentinel(tileid,cloud_limit,tile_limit,startdate,enddate,outfolder,preview,pr):
+def downloadSentinel(data_folder,tileid,cloud_limit,tile_limit,startdate,enddate,outfolder,preview,pr):
     sortColumns = ['CLOUD_COVER']
     tilefuso = tileid[0:2]
     single_letter = tileid[2:3]
     double_letter = tileid[3:]
-    file_name = "/home/rupestre/IMG_DOWNLOAD/index/sentinel_filtered_dataframev3.pickle"
+    file_name = os.path.join("index","sentinel_filtered_dataframev3.pickle")
     df = pd.read_pickle(file_name)
     tile_id = '{}_{}_{}'.format(tilefuso,single_letter,double_letter)
     start = datetime.strptime(startdate, '%Y-%m-%d')
@@ -119,7 +119,7 @@ def main():
         single_letter = tile[2:3]
         double_letter = tile[3:]
         print tile_fuso,single_letter,double_letter
-        downloadSentinel(tile_fuso,single_letter,double_letter,cloud_limit,tile_limit,startdate,enddate,sort_columns,outfolder,bands)
+        downloadSentinel(data_folder,tile_fuso,single_letter,double_letter,cloud_limit,tile_limit,startdate,enddate,sort_columns,outfolder,bands)
 
 if __name__ == "__main__":
     main()

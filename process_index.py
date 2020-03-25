@@ -21,21 +21,16 @@ def download_index(url,out_index):
     call('python "./gsutil/gsutil.py" -q cp -r {} {}'.format(url,out_index),shell=True)
 
 
-def process_indexBR():
-    out_index = '/home/rupestre/IMG_DOWNLOAD/index'
+def process_indexBR(data_folder,host,db,usr,pw):
+    out_index = os.path.join('index')
     url = 'gs://gcp-public-data-sentinel-2/index.csv.gz'
 
     download_index(url,out_index)
     index_csv = extract_gz(out_index)
     f = open(index_csv)
-    
-    databaseUser = "ckc"
-    databasePW = "garrafadecafe"
 
-    databaseServer = "177.105.35.20"
-    databaseName = "equipe_geo"
 
-    connString = "PG: host=%s dbname=%s user=%s password=%s" %(databaseServer,databaseName,databaseUser,databasePW)
+    connString = "PG: host=%s dbname=%s user=%s password=%s" %(host,db,usr,pw)
 
     conn = ogr.Open(connString)
 
@@ -108,6 +103,7 @@ def process_indexBR():
 
     file_name = os.path.join(out_index,'sentinel_filtered_dataframev3.pickle')
     df.to_pickle(file_name)
+    conn = None
 
 if __name__ == "__main__":
     main()
