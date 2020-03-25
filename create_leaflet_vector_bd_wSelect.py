@@ -15,12 +15,12 @@ def dashes(): msg(40*'-')
 def msgt(s): dashes(); msg(s); dashes()
 def msgx(s): dashes(); msg('ERROR'); msg(s); dashes(); sys.exit(0)
 
-def get_layers_from_search(conn,ar_cad,uf,sat):
+def get_layers_from_search(conn,ar_cad,uf,sat,shp_folder):
     uf[0] = uf[0].upper()
     satLay = conn.GetLayer('monitoramento_kfw.grid_sat')
     brLay = conn.GetLayer('monitoramento_kfw.br_estados_ibge_2015')
     if ar_cad[0] == '1':
-        get_arcad(uf[0])
+        get_arcad(uf[0],shp_folder)
     brLay.SetAttributeFilter("uf = '{}'".format(uf[0].upper()))
     n=0
     multi = ogr.Geometry(ogr.wkbMultiPolygon)
