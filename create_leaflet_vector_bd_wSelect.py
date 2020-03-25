@@ -95,6 +95,8 @@ def get_arcad(conn,uf,shp_folder):
     for feat in arcadLay:
         geom0 = feat.geometry()
         geom1 = make_valid_pols(geom0)
+        if geom1 == None:
+            continue
         geom2 = geom1.Simplify(0.0001)
         geom = make_valid_pols(geom2)
         if geom == None:
