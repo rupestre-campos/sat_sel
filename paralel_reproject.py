@@ -23,8 +23,8 @@ def paralel_img_processing(img_path,pr):
 
 def reproject_to_4326(imgs):
     img_p = imgs[0]
-    out_img = imgs[1]+'.vrt'
-    png = '{}.png'.format(out_img[:-4])
+    out_img = '{}.vrt'.format(imgs[1][:-4])
+    png = '{}.png'.format(imgs[1][:-4])
     try:
         if not os.path.isfile('{}.png'.format(out_img[:-4])):
             call('gdalwarp -q -t_srs epsg:4326 -of VRT {} {}'.format(img_p,out_img),shell=True)
