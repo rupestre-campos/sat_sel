@@ -37,7 +37,7 @@ def get_layers_from_search(conn,ar_cad,uf,sat):
 def create_grid_sat_shp(shp_folder,satLay,multi):
     output = os.path.join(shp_folder,'sat.shp')
     if os.path.isfile(output):
-        call('del /q {}'.format(output),shell=True)
+        call('rm {}'.format(output),shell=True)
     drv = ogr.GetDriverByName("ESRI Shapefile")
     out_ds = drv.CreateDataSource(output)
     out_lyr = out_ds.CreateLayer(output, satLay.GetSpatialRef(),satLay.GetGeomType())
@@ -88,7 +88,7 @@ def get_arcad(uf,shp_folder):
     #	multi = multi.Union(feat.geometry())
     output = os.path.join(shp_folder,'arcad.shp')
     if os.path.isfile(output):
-        call('del /q {}'.format(output),shell=True)
+        call('rm {}'.format(output),shell=True)
     out_ds = drv.CreateDataSource(output)
     out_lyr = out_ds.CreateLayer(output, arcadLay.GetSpatialRef(),arcadLay.GetGeomType())
     defn = out_lyr.GetLayerDefn()
@@ -211,7 +211,7 @@ def convert_shp_to_geojson(shape_fname):
     # write the GeoJSON file
     out_fname = os.path.join(shape_fname.replace('.shp', '.json'))
     if os.path.isfile(out_fname):
-        call('del /q {}'.format(out_fname),shell=True)
+        call('rm {}'.format(out_fname),shell=True)
 
     geojson = open(out_fname, "w")
     geojson.write(json.dumps({"type": "FeatureCollection","features": output_buffer}, indent=2))
@@ -304,7 +304,7 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
 
     output_html_fname = os.path.basename(output_html_path)
     if os.path.isfile(output_html_path):
-        call('del /q {}'.format(output_html_path),shell=True)
+        call('rm {}'.format(output_html_path),shell=True)
     m.save(output_html_path)
     print ('file written', output_html_fname)
 
@@ -451,14 +451,14 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
         f_output.write(soup.prettify("utf-8"))
 
 def create_leaf_page(arcad,loc):
-    shp_grid = r"C:\IMG_DOWNLOAD\shp\sat.shp"
-    shp_arcad = r"C:\IMG_DOWNLOAD\shp\arcad.shp"
+    shp_grid = "home/rupestre/IMG_DOWNLOAD/shp/sat.shp"
+    shp_arcad = "/home/rupestre/IMG_DOWNLOAD/shp/arcad.shp"
     geojson_grid = convert_shp_to_geojson(shp_grid)
     if arcad == '1':
         geojson_arcad = convert_shp_to_geojson(shp_arcad)
     else:
         geojson_arcad = None
-    make_leaflet_page(geojson_grid,geojson_arcad, r"C:\IMG_DOWNLOAD\grid_sat.html",loc)
+    make_leaflet_page(geojson_grid,geojson_arcad, "/home/rupestre/IMG_DOWNLOAD/grid_sat.html",loc)
 
 
 if __name__=='__main__':
