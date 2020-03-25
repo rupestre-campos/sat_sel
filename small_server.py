@@ -68,7 +68,7 @@ class myHandler(BaseHTTPRequestHandler):
 
 				connString = "PG: host=%s dbname=%s user=%s password=%s" %(databaseServer,databaseName,databaseUser,databasePW)
 				conn = ogr.Open(connString)
-				satLay,multi,loc = get_layers_from_search(conn,ar_cad,uf,sat)
+				satLay,multi,loc = get_layers_from_search(conn,ar_cad,uf,sat,shp_folder)
 				create_grid_sat_shp(shp_folder,satLay,multi)
 				create_leaf_page(shp_folder,ar_cad[0],loc)
 				conn = None
