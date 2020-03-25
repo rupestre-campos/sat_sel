@@ -12,10 +12,10 @@ from process_index import process_indexBR
 
 pr = 4
 
-databaseUser = "select_img_user"
-databasePW = "****"
+databaseUser = "ckc"
+databasePW = "garrafadecafe"
 
-databaseServer = "*****"
+databaseServer = "177.105.35.20"
 databaseName = "equipe_geo"
 
 data_folder = '/home/rupestre/IMG_DOWNLOAD'
