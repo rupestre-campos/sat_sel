@@ -30,7 +30,7 @@ def reproject_to_4326(imgs):
             call('gdalwarp -q -t_srs epsg:4326 -of VRT {} {}'.format(img_p,out_img),shell=True)
             call('gdal_translate -q -of PNG -a_nodata 0 {} {}'.format(out_img,png),shell=True)
             call('gdaladdo -r cubic --config COMPRESS_OVERVIEW JPEG --config PHOTOMETRIC_OVERVIEW YCBCR \
-                  --config PHOTOMETRIC_OVERVIEW YCBCR {} 2 4 8 16 32 64 128 256'.format(png),shell=True)
+                  --config PHOTOMETRIC_OVERVIEW YCBCR {} 512'.format(png),shell=True)
             call('rm {}'.format(img_p),shell=True)
             call('rm {}'.format(out_img),shell=True)
     except Exception as e:
