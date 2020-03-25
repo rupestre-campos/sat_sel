@@ -18,19 +18,19 @@ def extract_gz(out_index):
     return out_index
 
 def download_index(url,out_index):
-    call('python ".\gsutil\gsutil.py" -q cp -r {} {}'.format(url,out_index),shell=True)
+    call('python "./gsutil/gsutil.py" -q cp -r {} {}'.format(url,out_index),shell=True)
 
 
 def process_indexBR():
-    out_index = r'C:\IMG_DOWNLOAD\index'
+    out_index = '/home/rupestre/IMG_DOWNLOAD/index'
     url = 'gs://gcp-public-data-sentinel-2/index.csv.gz'
 
     download_index(url,out_index)
     index_csv = extract_gz(out_index)
     f = open(index_csv)
     outfolder = '\\'.join(index_csv.split('\\')[:-1])
-    databaseUser = "caina"
-    databasePW = "Fallout3lol"
+    databaseUser = "ckc"
+    databasePW = "garrafadecafe"
 
     databaseServer = "177.105.35.20"
     databaseName = "equipe_geo"
@@ -84,7 +84,7 @@ def process_indexBR():
     #n = 0
     #for i in save:
     #    n += len(save[i])
-        
+
     totalEntry = n
     columns = ['TILE_ID','PRODUCT_ID','GRANULE_ID','SENSING_TIME','CLOUD_COVER','GEOMETRIC_QUALITY','NORTH_LAT','SOUTH_LAT','WEST_LON','EAST_LON','TOTAL_SIZE','BASE_URL']
     df = pd.DataFrame(index=[i for i in xrange(totalEntry)],columns=columns)

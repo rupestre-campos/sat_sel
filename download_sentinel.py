@@ -107,7 +107,7 @@ def parallelMother(scenes,proc):
 def download_parallel(data):
     url = data[0]
     out_tile_folder =data[1]
-    call('python ".\gsutil\gsutil.py" -q cp -r {} {}'.format(url,out_tile_folder),shell=True)
+    call('python "./gsutil/gsutil.py" -q cp -r {} {}'.format(url,out_tile_folder),shell=True)
 
 def main():
     driver = ogr.GetDriverByName('ESRI Shapefile')
