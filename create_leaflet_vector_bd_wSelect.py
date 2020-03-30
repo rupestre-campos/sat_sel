@@ -32,9 +32,9 @@ def get_layers_from_search(conn,schema,uf,shp_folder):
     sql = "SELECT sat.geom,sat.fuso,sat.tile_id,sat.d_2017,sat.d_2018,sat.d_2019 \
            FROM (SELECT * FROM {}.grid_sat WHERE sat = 'SENTINEL') as sat \
         INNER JOIN     \
-                (SELECT geom FROM {}.br_estados_ibge_2015 WHERE uf = '{}') as uf\
-                ON sat.geom && uf.geom
-           WHERE  ST_Touches(sat.geomm,uf.geom) ;".format(schema,schema,uf[0].upper())
+                (SELECT geom FROM {}.br_estados_ibge_2015 WHERE uf = '{}') as uf \
+                ON (sat.geom && uf.geom AND \
+                    ST_Touches(sat.geomm,uf.geom)) ;".format(schema,schema,uf[0].upper())
     satLay = conn.ExecuteSQL(sql)
     #satLay.SetAttributeFilter("sat = '{}'".format(sat[0].upper()))
     #satLay.SetSpatialFilter(multi)
