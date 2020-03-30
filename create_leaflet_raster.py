@@ -128,7 +128,7 @@ def preview_to_new_map(img_list,data_folder,tile_id,uf,db_col):
     tag_form.insert(5,new_tag)
     new_tag = Tag(builder=soup.builder,
                name='input',
-               attrs={'name':'db_col','id':'db_col','type':'text','value':db_col[0],'readonly':'readonly'})
+               attrs={'name':'db_col','id':'db_col','type':'text','value':db_col,'readonly':'readonly'})
     tag_form.insert(6,new_tag)
 
     new_tag = soup.new_tag('input', value="Save", **{'type':'submit'})
