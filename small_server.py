@@ -1,4 +1,6 @@
 from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
+from SocketServer import ThreadingMixIn
+import threading
 from os import curdir, sep
 import urlparse
 from download_sentinel import downloadSentinel
@@ -174,9 +176,11 @@ class myHandler(BaseHTTPRequestHandler):
 		except Exception as e:
 			print(e)
 
+class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+    """Handle requests in a separate thread."""
 
 def main():
-	PORT_NUMBER = 8080
+
 	try:
 		#Create a web server and define the handler to manage the
 		#incoming request
@@ -191,4 +195,6 @@ def main():
 		server.socket.close()
 
 if __name__ == "__main__":
-	main()
+    server = ThreadedHTTPServer(('localhost', PORT_NUMBER), myHandler)
+    print 'Starting server, use <Ctrl-C> to stop'
+    server.serve_forever()
