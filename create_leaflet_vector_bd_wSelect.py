@@ -403,7 +403,7 @@ def make_leaflet_page(geojson_grid,output_html_path,loc,uf):
 
     new_tag = Tag(builder=soup.builder,
                name='input',
-               attrs={'name':'f_date','id':'2019','value':'2019','type':'radio'})
+               attrs={'name':'f_date','id':'2019','value':'2019','type':'radio','checked':'true'})
     #new_tag = soup.new_tag('input', name="tileId",  size="250", **{'type':'text'})
     tag_div1.insert(5,new_tag)
     new_tag = soup.new_tag('label', **{'for':'2019'})
