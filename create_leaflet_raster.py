@@ -155,7 +155,7 @@ def preview_to_new_map(img_list,data_folder,tile_id,uf,db_col):
             n+=1
         }
         //console.log(lay)
-        var tile_input = document.getElementById('tile_id');
+        var tile_input = document.getElementById('images');
         tile_input.value = lay;
     };
     %s.on("dblclick", clickHandler);
