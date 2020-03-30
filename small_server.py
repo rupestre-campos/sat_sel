@@ -137,7 +137,7 @@ class myHandler(BaseHTTPRequestHandler):
 				print tile_id,selected_imgs,uf,db_col
 				connString = "PG: host=%s dbname=%s user=%s password=%s" %(databaseServer,databaseName,databaseUser,databasePW)
 				conn = ogr.Open(connString,1)
-				satLay = conn.GetLayer('monitoramento_kfw.grid_sat')
+				satLay = conn.GetLayer('{}.grid_sat'.format(schema))
 				satLay.SetAttributeFilter("sat = 'SENTINEL' AND tile_id = '{}'".format(tile_id[0]))
 				feature = conn.GetNextFeature()
 				feature.SetField(db_col[0], ','.join(selected_imgs))
@@ -147,7 +147,7 @@ class myHandler(BaseHTTPRequestHandler):
 				conn = feature = None
 				self.send_response(200)
 				self.end_headers()
-				self.path="/gen_map_update/*?uf={}".format(uf)
+				self.path="/gen_map?uf={}".format(uf[0])
 				self.wfile.write('<html>')
 				self.wfile.write('  <head>')
 				self.wfile.write('		<meta http-equiv="refresh" content="0;url={} />'.format(self.path))
@@ -170,6 +170,8 @@ class myHandler(BaseHTTPRequestHandler):
 			self.send_error(404,'File Not Found: %s' % self.path)
 		except KeyboardInterrupt:
 			self.send_error(404,'File Not Found: %s' % self.path)
+		except Exception as e:
+			print(e)
 
 
 def main():
