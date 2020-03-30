@@ -141,7 +141,7 @@ class myHandler(BaseHTTPRequestHandler):
 				satLay.SetAttributeFilter("sat = 'SENTINEL' AND tile_id = '{}'".format(tile_id[0]))
 				feature = conn.GetNextFeature()
 				feature.SetField(db_col, ','.join(selected_imgs))
-				satLay.SetFeature(feature
+				satLay.SetFeature(feature)
 			    satLay.StartTransaction()
 			    satLay.CommitTransaction()
 				conn = None
