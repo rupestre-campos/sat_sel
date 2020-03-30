@@ -90,7 +90,7 @@ class myHandler(BaseHTTPRequestHandler):
 				max_tile = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('max_tile', None)
 				uf = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('uf', None)
 				outfolder= os.path.join(data_folder,'preview')
-				print('got {} {} {} {} {} {} {}'.format(tile_id,pre_fix_date,initial_date,final_date,max_cloud,max_tile,uf)
+				print('got {} {} {} {} {} {} {}'.format(tile_id,pre_fix_date,initial_date,final_date,max_cloud,max_tile,uf))
 				if pre_fix_date[0] == "2017":
 					initial_date = '2017-01-01'
 					final_date = '2017-12-31'
