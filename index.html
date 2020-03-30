@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<head>    
+<head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <script>L_PREFER_CANVAS=false; L_NO_TOUCH=false; L_DISABLE_3D=false;</script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.4.0/dist/leaflet.js"></script>
@@ -15,7 +15,7 @@
     <style>
     html, body {
         width: 100%;height: 100%;margin: 0;padding: 10;}</style>
-    <style> 
+    <style>
     sidenav {
     height: 100%; /* Full-height: remove this if you want "auto" height */
     width: 160px; /* Set the width of the sidebar */
@@ -27,7 +27,7 @@
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px;}</style>
     <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
-    
+
     <meta name="viewport" content="width=device-width,
         initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <style>#map{
@@ -39,43 +39,52 @@
         }
     </style>
 </head>
-<body>    
+<body>
     <h1 style="font-weight: bold;font-size: 42px;">Sattelite preview selection Tool</h1>
-    
+
     <form action="/gen_map" method="get">
-        
+
         <div class="field" style="font-weight: bold;font-size: 13px;">UF:</div>
         <input list="ufs" name="uf" id="uf"/>
         <datalist id="ufs" name="ufs">
-            <option value="AM">
-            <option value="BA">
-            <option value="MG">
-            <option value="MT">
-            <option value="PA">
-
+              <option value="AC">
+              <option value="AL">
+              <option value="AM">
+              <option value="AP">
+              <option value="BA">
+              <option value="CE">
+              <option value="DF">
+              <option value="ES">
+              <option value="GO">
+              <option value="MA">
+              <option value="MG">
+              <option value="MS">
+              <option value="MT">
+              <option value="PA">
+              <option value="PB">
+              <option value="PE">
+              <option value="PI">
+              <option value="PR">
+              <option value="RJ">
+              <option value="RN">
+              <option value="RO">
+              <option value="RO">
+              <option value="RS">
+              <option value="SC">
+              <option value="SE">
+              <option value="SP">
+              <option value="TO">
         </datalist>
-        
-        <input type="submit" value="Grid it!" style="float: right;height:185px;width:300px;font-size: 80px;font-weight: bold;"/>
-        <div class="field" style="font-weight: bold;font-size: 13px;">Satelite:</div>
-        <div> 
-            <input type="radio" name="sat" id="sentinel" value="sentinel">
-            <label for="sentinel">Sentinel</label>
-            <input type="radio" name="sat" id="landsat" value="landsat">
-            <label for="landsat">Landsat</label>
-        </div>
-        <div><label class="field" style="font-weight: bold;font-size: 13px;">Área Cadastravel ?:</label></div>
-            <input type="radio" name="arcad" id="arcad" value="1">
-            <label for="arcad">Yes</label>
-            <input type="radio" name="arcad" id="arcad" value="0">
-            <label for="arcad">No</label>
-    
+
+        <input type="submit" value="Grid it!" style="font-weight: bold;"/>
+
     </form>
     <form action="/update_index" method="get">
-        <input type="submit" value="Update Index"/>
+        <input type="submit"  style="float: right;font-weight: bold" value="Update Index"/>
     </form>
-    
+
     <!--<button> <a href="link">Click me</a></button> -->
-<!-- Side navigation 
+<!-- Side navigation
     <div class="sidenav">
     <a href="#">About</a>
     <a href="#">Services</a>
@@ -85,11 +94,11 @@
 
     <div class="folium-map" id="map" ></div>
 </body>
-<script>    
-    
+<script>
+
         var bounds = null;
-        
-    
+
+
         var map = L.map(
             'map', {
             center: [-4.861101, -52.591553],
@@ -100,20 +109,20 @@
             crs: L.CRS.EPSG3857,
             zoomControl: true,
             });
-    
-    
-        
+
+
+
         var tile_layer_c5742cdf9f0843149c479274832c6e04 = L.tileLayer(
             'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
             {
-            "attribution": null, 
-            "detectRetina": false, 
-            "maxNativeZoom": 18, 
-            "maxZoom": 18, 
-            "minZoom": 0, 
-            "noWrap": false, 
-            "opacity": 1, 
-            "subdomains": "abc", 
+            "attribution": null,
+            "detectRetina": false,
+            "maxNativeZoom": 18,
+            "maxZoom": 18,
+            "minZoom": 0,
+            "noWrap": false,
+            "opacity": 1,
+            "subdomains": "abc",
             "tms": false
     }).addTo(map);
     </script>

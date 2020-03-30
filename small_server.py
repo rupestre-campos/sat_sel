@@ -18,23 +18,21 @@ databasePW = "garrafadecafe"
 databaseServer = "177.105.35.20"
 databaseName = "equipe_geo"
 
+schema = 'monitoramento_kfw'
+
 data_folder = '/home/rupestre/IMG_DOWNLOAD'
 shp_folder = os.path.join(data_folder,'shp')
 
 PORT_NUMBER = 8080
 
-tile_id = ''
-db_col = ''
-sat = ''
-uf = ''
-ar_cad = ''
+
 #This class will handles any incoming request from
 #the browser
 class myHandler(BaseHTTPRequestHandler):
 
 	#Handler for the GET requests
 	def do_GET(self):
-		global tile_id,data_folder,db_col,pr,sat,uf,ar_cad
+		global data_folder,pr
 
 		if self.path=="/":
 			self.path="/index.html"
@@ -59,18 +57,18 @@ class myHandler(BaseHTTPRequestHandler):
 				self.wfile.write('</html>')
 
 			if self.path.startswith("/gen_map"):
-				if not self.path.endswith('update'):
-					sat = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('sat', None)
-					uf = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('uf', None)
-					ar_cad = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('arcad', None)
-				print sat,uf,ar_cad
+
+					#sat = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('sat', None)
+				uf = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('uf', None)
+					#ar_cad = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('arcad', None)
+				print uf#,ar_cad
 
 
 				connString = "PG: host=%s dbname=%s user=%s password=%s" %(databaseServer,databaseName,databaseUser,databasePW)
 				conn = ogr.Open(connString)
-				satLay,multi,loc = get_layers_from_search(conn,ar_cad,uf,sat,shp_folder)
+				satLay,multi,loc = get_layers_from_search(conn,schema,uf,sat,shp_folder)
 				create_grid_sat_shp(shp_folder,satLay,multi)
-				create_leaf_page(shp_folder,ar_cad[0],loc)
+				create_leaf_page(shp_folder,loc,uf)
 				conn = None
 				self.send_response(200)
 				self.end_headers()
@@ -90,8 +88,9 @@ class myHandler(BaseHTTPRequestHandler):
 				final_date = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('final_date', None)
 				max_cloud = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('max_cloud', None)
 				max_tile = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('max_tile', None)
+				uf = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('uf', None)
 				outfolder= os.path.join(data_folder,'preview')
-				print('got {} {} {} {} {} {}'.format(tile_id,pre_fix_date,initial_date,final_date,max_cloud,max_tile))
+				print('got {} {} {} {} {} {} {}'.format(tile_id,pre_fix_date,initial_date,final_date,max_cloud,max_tile,uf)
 				if pre_fix_date[0] == "2017":
 					initial_date = '2017-01-01'
 					final_date = '2017-12-31'
@@ -114,7 +113,7 @@ class myHandler(BaseHTTPRequestHandler):
 					print('search resulted in {}'.format(out_tiles))
 					out_tiles = paralel_img_processing(out_tiles[1],pr)
 					print('process resulted in {}'.format(out_tiles))
-					preview_to_new_map(out_tiles,ar_cad[0],shp_folder)
+					preview_to_new_map(out_tiles,shp_folder,tile_id,uf,db_col)
 					print('map preview generated')
 					#self.path="/tiles_preview.html"
 					self.send_response(200)
@@ -130,23 +129,28 @@ class myHandler(BaseHTTPRequestHandler):
 
 			if self.path.startswith("/fulldownload"):
 				print self.path
-				selected_imgs = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('tile_id', None)
+				uf = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('uf', None)
+				tile_id = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('tile_id', None)
+				db_col = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('db_col', None)
+				selected_imgs = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('images', None)
 				selected_imgs = selected_imgs[0].split(',')
-				print tile_id,selected_imgs
+				print tile_id,selected_imgs,uf,db_col
 				connString = "PG: host=%s dbname=%s user=%s password=%s" %(databaseServer,databaseName,databaseUser,databasePW)
 				conn = ogr.Open(connString,1)
 				satLay = conn.GetLayer('monitoramento_kfw.grid_sat')
 				satLay.SetAttributeFilter("sat = 'SENTINEL' AND tile_id = '{}'".format(tile_id[0]))
-				for feature in satLay:
-					feature.SetField(db_col, ','.join(selected_imgs))
-					satLay.SetFeature(feature)
+				feature = conn.GetNextFeature()
+				feature.SetField(db_col, ','.join(selected_imgs))
+				satLay.SetFeature(feature
+			    satLay.StartTransaction()
+			    satLay.CommitTransaction()
 				conn = None
 				self.send_response(200)
 				self.end_headers()
-				self.path="/gen_map_update"
+				self.path="/gen_map_update/*?uf={}".format(uf)
 				self.wfile.write('<html>')
 				self.wfile.write('  <head>')
-				self.wfile.write('		<meta http-equiv="refresh" content="0;url={}" />'.format(self.path))
+				self.wfile.write('		<meta http-equiv="refresh" content="0;url={} />'.format(self.path))
 				self.wfile.write('  </head>')
 				self.wfile.write('</html>')
 

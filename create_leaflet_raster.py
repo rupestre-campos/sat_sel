@@ -50,7 +50,7 @@ def getCenter(ext):
     yc = float(sum(y))/len(y)
     return (xc,yc)
 
-def preview_to_new_map(img_list,ar_cad,data_folder):
+def preview_to_new_map(img_list,data_folder,tile_id,uf,db_col):
     ds = gdal.Open(img_list[0])
     gt = ds.GetGeoTransform()
     cols = ds.RasterXSize
@@ -58,10 +58,9 @@ def preview_to_new_map(img_list,ar_cad,data_folder):
     ext = GetExtent(gt,cols,rows)
     center = getCenter(ext)
     ds = None
-    if ar_cad == '1':
-        tiles = None
-    else:
-        tiles = 'Stamen Toner'
+
+
+    tiles = 'Stamen Toner'
     m = folium.Map(location=[center[1],center[0]], height='90%', zoom_start = 10,tiles=tiles)
     #tiles='Stamen Toner'
     #if len(img_list) >1:
@@ -85,30 +84,8 @@ def preview_to_new_map(img_list,ar_cad,data_folder):
         if n == len(img_list):
             show = True
         folium.raster_layers.ImageOverlay(name=imgn_name,image=imgn,interactive=True,bounds=coords,show=show).add_to(m)
-        
 
-    if ar_cad == '1':
-        shp_arcad = os.path.join(data_folder,"arcad.shp")
-        geojson_arcad = os.path.join(shp_arcad.replace('.shp', '.json'))
-        geojson = folium.GeoJson(geojson_arcad,style_function=style_function_arcad,name='area cadastravel',overlay=False)
-        geojson.add_to(m)
-    '''
-    else:
-        imgn = img_list[0]
-        print imgn
-        imgn_name = imgn.split('\\')[-1]
-        ds = gdal.Open(imgn)
-        gt = ds.GetGeoTransform()
-        cols = ds.RasterXSize
-        rows = ds.RasterYSize
-        ext = GetExtent(gt,cols,rows)
-        ds = None
-        #with rio.open(imgn) as src:
-        #    img_rio = src.read()
-        coords = [[i[1],i[0]] for i in ext]
-        print coords
-        folium.raster_layers.ImageOverlay(name=imgn_name,image=imgn,interactive=True,bounds=coords).add_to(m)
-    '''
+
     m.add_child(folium.LayerControl())
     outHtml = 'tiles_preview.html'
     call('rm {}'.format(outHtml),shell=True)
@@ -130,19 +107,32 @@ def preview_to_new_map(img_list,ar_cad,data_folder):
     new_tag = soup.new_tag('form',action="/fulldownload", method="get")
     tag.insert(2,new_tag)
     tag_form = soup.form
-
-
     new_tag = soup.new_tag('div', **{'class':'field'})
     new_tag.string = "SELECTED Images :"
     tag_form.insert(1,new_tag)
     new_tag = Tag(builder=soup.builder,
                name='input',
-               attrs={'name':'tile_id','id':'tile_id','size':'250','type':'text'})
+               attrs={'name':'images','id':'images','size':'250','type':'text'})
     #new_tag = soup.new_tag('input', name="tileId",  size="250", **{'type':'text'})
     tag_form.insert(2,new_tag)
-
-    new_tag = soup.new_tag('input', value="Write Tile ID", **{'type':'submit'})
+    new_tag = soup.new_tag('div', **{'class':'field'})
+    new_tag.string = "Parameters :"
     tag_form.insert(3,new_tag)
+    new_tag = Tag(builder=soup.builder,
+               name='input',
+               attrs={'name':'uf','id':'uf','type':'text','value':uf[0],'readonly':'readonly'})
+    tag_form.insert(4,new_tag)
+    new_tag = Tag(builder=soup.builder,
+               name='input',
+               attrs={'name':'tile_id','id':'tile_id','type':'text','value':tile_id[0],'readonly':'readonly'})
+    tag_form.insert(5,new_tag)
+    new_tag = Tag(builder=soup.builder,
+               name='input',
+               attrs={'name':'db_col','id':'db_col','type':'text','value':db_col[0],'readonly':'readonly'})
+    tag_form.insert(6,new_tag)
+
+    new_tag = soup.new_tag('input', value="Save", **{'type':'submit'})
+    tag_form.insert(7,new_tag)
 
     click_function = '''
     function clickHandler(e) {

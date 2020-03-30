@@ -15,24 +15,28 @@ def dashes(): msg(40*'-')
 def msgt(s): dashes(); msg(s); dashes()
 def msgx(s): dashes(); msg('ERROR'); msg(s); dashes(); sys.exit(0)
 
-def get_layers_from_search(conn,ar_cad,uf,sat,shp_folder):
+def get_layers_from_search(conn,schema,uf,shp_folder):
     uf[0] = uf[0].upper()
-    satLay = conn.GetLayer('monitoramento_kfw.grid_sat')
-    brLay = conn.GetLayer('monitoramento_kfw.br_estados_ibge_2015')
-    if ar_cad[0] == '1':
-        get_arcad(conn,uf[0],shp_folder)
-    brLay.SetAttributeFilter("uf = '{}'".format(uf[0].upper()))
+    #satLay = conn.GetLayer('monitoramento_kfw.grid_sat')
+    br_lay = conn.GetLayer('{}.br_estados_ibge_2015'.format(schema))
+    #if ar_cad[0] == '1':
+    #    get_arcad(conn,uf[0],shp_folder)
+    br_lay.SetAttributeFilter("uf = '{}'".format(uf[0].upper()))
     n=0
-    multi = ogr.Geometry(ogr.wkbMultiPolygon)
-    for feat in brLay:
-        multi = multi.Union(feat.geometry())
-        n+=1
-    long = multi.Centroid().GetX()
-    lat = multi.Centroid().GetY()
+    feat = br_lay.GetNextFeature()
+    geom = feat.geometry()
+    long = geom.Centroid().GetX()
+    lat = geom.Centroid().GetY()
     loc = [long,lat]
-    satLay.SetAttributeFilter("sat = '{}'".format(sat[0].upper()))
-    satLay.SetSpatialFilter(multi)
-    return satLay,multi,loc
+    br_lay = None
+    sql = "SELECT sat.geom,sat.fuso,sat.tile_id,sat.d_2017,sat.d_2018,sat.d_2019 \
+           FROM (SELECT * FROM {}.grid_sat WHERE sat = 'SENTINEL') as sat, \
+                (SELECT geom FROM {}.br_estados_ibge_2015 WHERE uf = '{}') as uf\
+           WHERE sat.geom && uf.geom;".format(schema,schema,uf[0].upper())
+    satLay = conn.ExecuteSQL(sql)
+    #satLay.SetAttributeFilter("sat = '{}'".format(sat[0].upper()))
+    #satLay.SetSpatialFilter(multi)
+    return satLay,geom,loc
 
 def create_grid_sat_shp(shp_folder,satLay,multi):
     output = os.path.join(shp_folder,'sat.shp')
@@ -61,20 +65,20 @@ def create_grid_sat_shp(shp_folder,satLay,multi):
     n=0
     for feat in satLay:
         geom = feat.geometry()
-        if geom.Intersects(multi):
-            tileId = feat.GetField('tile_id')
-            d17 = feat.GetField('d_2017')
-            d18 = feat.GetField('d_2018')
-            d19 = feat.GetField('d_2019')
-            out_feat = ogr.Feature(defn)
-            out_feat.SetGeometry(geom)
-            out_feat.SetField('d_2017', d17)
-            out_feat.SetField('d_2018', d18)
-            out_feat.SetField('d_2019', d19)
-            out_feat.SetField('tile_id', tileId)
-            out_lyr.CreateFeature(out_feat)
-            out_feat = None
-            n+=1
+        #if geom.Intersects(multi):
+        tileId = feat.GetField('tile_id')
+        d17 = feat.GetField('d_2017')
+        d18 = feat.GetField('d_2018')
+        d19 = feat.GetField('d_2019')
+        out_feat = ogr.Feature(defn)
+        out_feat.SetGeometry(geom)
+        out_feat.SetField('d_2017', d17)
+        out_feat.SetField('d_2018', d18)
+        out_feat.SetField('d_2019', d19)
+        out_feat.SetField('tile_id', tileId)
+        out_lyr.CreateFeature(out_feat)
+        out_feat = None
+        n+=1
     out_lyr = None
     out_ds = None
 
@@ -296,7 +300,7 @@ def highlight_function(feature):
         'dashArray': '5, 5'}
     return high
 
-def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
+def make_leaflet_page(geojson_grid,output_html_path,loc,uf):
     """Using folium, make an HTML page using GEOJSON input
         examples: https://github.com/wrobstory/folium
 
@@ -321,9 +325,9 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
     '''
 
     m = folium.Map(location=[ loc[1], loc[0]],height='70%',tiles='Stamen Toner',zoom_start=6)
-    if not geojson_arcad == None:
-        geojson = folium.GeoJson(geojson_arcad,name='area cadastravel')
-        geojson.add_to(m)
+    #if not geojson_arcad == None:
+    #    geojson = folium.GeoJson(geojson_arcad,name='area cadastravel')
+    #    geojson.add_to(m)
     geojson = folium.GeoJson(geojson_grid,style_function=style_function,highlight_function=highlight_function,name='grid sattelite')
     #m.add_child(fg)
     #
@@ -441,7 +445,7 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
 
     new_tag = Tag(builder=soup.builder,
                name='input',
-               attrs={'name':'max_cloud','id':'max_cloud','type':'text'})
+               attrs={'name':'max_cloud','id':'max_cloud','type':'text','value':'20'})
     tag_form.insert(7,new_tag)
 
     new_tag = soup.new_tag('div', **{'class':'field','style':'font-weight: bold;'})
@@ -450,9 +454,18 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
 
     new_tag = Tag(builder=soup.builder,
                name='input',
-               attrs={'name':'max_tile','id':'max_tile','type':'text'})
+               attrs={'name':'max_tile','id':'max_tile','type':'text','value':'5'})
     tag_form.insert(9,new_tag)
 
+    new_tag = soup.new_tag('div', **{'class':'field','style':'font-weight: bold;'})
+    new_tag.string = 'UF:'
+    tag_form.insert(10,new_tag)
+
+    new_tag = Tag(builder=soup.builder,
+               name='input',
+               attrs={'name':'uf','id':'uf','type':'text','value':uf[0],'readonly':'readonly'})
+
+    tag_form.insert(11,new_tag)
     tag_script = soup.find_all('script')[-1]
 
     tag_list = tag_script.prettify().split('\n')
@@ -483,15 +496,15 @@ def make_leaflet_page(geojson_grid,geojson_arcad, output_html_path,loc):
     with open(output_html_path, "wb") as f_output:
         f_output.write(soup.prettify("utf-8"))
 
-def create_leaf_page(shp_folder,arcad,loc):
+def create_leaf_page(shp_folder,loc,uf):
     shp_grid = os.path.join(shp_folder,"sat.shp")
-    shp_arcad = os.path.join(shp_folder,"arcad.shp")
+    #shp_arcad = os.path.join(shp_folder,"arcad.shp")
     geojson_grid = convert_shp_to_geojson(shp_grid)
-    if arcad == '1':
-        geojson_arcad = convert_shp_to_geojson(shp_arcad)
-    else:
-        geojson_arcad = None
-    make_leaflet_page(geojson_grid,geojson_arcad, "grid_sat.html",loc)
+    #if arcad == '1':
+    #    geojson_arcad = convert_shp_to_geojson(shp_arcad)
+    #else:
+    #    geojson_arcad = None
+    make_leaflet_page(geojson_grid, "grid_sat.html",loc,uf)
 
 
 if __name__=='__main__':
