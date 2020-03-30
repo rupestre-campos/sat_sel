@@ -33,8 +33,7 @@ def get_layers_from_search(conn,schema,uf,shp_folder):
            FROM (SELECT * FROM {}.grid_sat WHERE sat = 'SENTINEL') as sat \
         INNER JOIN     \
                 (SELECT geom FROM {}.br_estados_ibge_2015 WHERE uf = '{}') as uf \
-                ON (sat.geom && uf.geom AND \
-                    ST_Touches(sat.geom,uf.geom)) ;".format(schema,schema,uf[0].upper())
+                ON ST_Intersects(sat.geom,uf.geom) ;".format(schema,schema,uf[0].upper())
     satLay = conn.ExecuteSQL(sql)
     #satLay.SetAttributeFilter("sat = '{}'".format(sat[0].upper()))
     #satLay.SetSpatialFilter(multi)
