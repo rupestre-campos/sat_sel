@@ -139,7 +139,7 @@ class myHandler(BaseHTTPRequestHandler):
 				conn = ogr.Open(connString,1)
 				satLay = conn.GetLayer('{}.grid_sat'.format(schema))
 				satLay.SetAttributeFilter("sat = 'SENTINEL' AND tile_id = '{}'".format(tile_id[0]))
-				feature = conn.GetNextFeature()
+				feature = satLay.GetNextFeature()
 				feature.SetField(db_col[0], ','.join(selected_imgs))
 				satLay.SetFeature(feature)
 				satLay.StartTransaction()
@@ -147,7 +147,7 @@ class myHandler(BaseHTTPRequestHandler):
 				conn = feature = None
 				self.send_response(200)
 				self.end_headers()
-				self.path="/gen_map?uf={}".format(uf[0])
+				self.path = "/gen_map?uf={}".format(uf[0])
 				self.wfile.write('<html>')
 				self.wfile.write('  <head>')
 				self.wfile.write('		<meta http-equiv="refresh" content="0;url={} />'.format(self.path))
