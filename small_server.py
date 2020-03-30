@@ -142,9 +142,10 @@ class myHandler(BaseHTTPRequestHandler):
 				feature = satLay.GetNextFeature()
 				feature.SetField(db_col[0], ','.join(selected_imgs))
 				satLay.SetFeature(feature)
-				satLay.StartTransaction()
-				satLay.CommitTransaction()
-				conn = feature = None
+				#satLay.StartTransaction()
+				#satLay.CommitTransaction()
+
+				conn = None
 				self.send_response(200)
 				self.end_headers()
 				self.path = "/gen_map?uf={}".format(uf[0])
