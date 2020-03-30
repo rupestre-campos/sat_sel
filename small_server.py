@@ -140,7 +140,7 @@ class myHandler(BaseHTTPRequestHandler):
 				satLay = conn.GetLayer('monitoramento_kfw.grid_sat')
 				satLay.SetAttributeFilter("sat = 'SENTINEL' AND tile_id = '{}'".format(tile_id[0]))
 				feature = conn.GetNextFeature()
-				feature.SetField(db_col, ','.join(selected_imgs))
+				feature.SetField(db_col[0], ','.join(selected_imgs))
 				satLay.SetFeature(feature)
 				satLay.StartTransaction()
 				satLay.CommitTransaction()
