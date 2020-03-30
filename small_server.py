@@ -151,7 +151,7 @@ class myHandler(BaseHTTPRequestHandler):
 				self.path = "/gen_map?uf={}".format(uf[0])
 				self.wfile.write('<html>')
 				self.wfile.write('  <head>')
-				self.wfile.write('		<meta http-equiv="refresh" content="0;url={} />'.format(self.path))
+				self.wfile.write('		<meta http-equiv="refresh" content="0;url=\'{}\'" />'.format(self.path))
 				self.wfile.write('  </head>')
 				self.wfile.write('</html>')
 
