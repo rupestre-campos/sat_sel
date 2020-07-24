@@ -68,7 +68,7 @@ def preview_to_new_map(img_list,data_folder,tile_id,uf,db_col):
     show = False
 
     for imgn in img_list:
-        print imgn
+        print (imgn)
         imgn_name = os.path.basename(imgn)
         ds = gdal.Open(imgn)
         gt = ds.GetGeoTransform()
@@ -79,7 +79,7 @@ def preview_to_new_map(img_list,data_folder,tile_id,uf,db_col):
         #with rio.open(imgn) as src:
         #    img_rio = src.read()
         coords = [[i[1],i[0]] for i in ext]
-        print coords
+        #print coords
         n+=1
         if n == len(img_list):
             show = True
