@@ -11,11 +11,11 @@ import os
 from subprocess import call
 from create_leaflet_vector_bd_wSelect import create_leaf_page,get_arcad,create_grid_sat_shp,get_layers_from_search
 from process_index import process_indexBR
-
+from getpass import getpass
 pr = 4
 
-databaseUser = "ckc"
-databasePW = "garrafadecafe"
+databaseUser = input('enter DB User: ')
+databasePW = getpass('enter DB Password: ')
 
 databaseServer = "177.105.35.20"
 databaseName = "equipe_geo"
