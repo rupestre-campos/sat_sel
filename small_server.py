@@ -25,6 +25,8 @@ schema = 'sat_sel'
 
 data_folder = '/media/rupestre/DADOS/img_download'
 shp_folder = os.path.join(data_folder,'shp')
+if not os.path.isdir(shp_folder):
+	os.mkdir(shp_folder)
 
 PORT_NUMBER = 8080
 
@@ -77,11 +79,11 @@ class myHandler(BaseHTTPRequestHandler):
 				self.end_headers()
 				#self.path="/tiles_preview.html"
 				self.path="/grid_sat.html"
-				self.wfile.write('<html>')
-				self.wfile.write('  <head>')
-				self.wfile.write('		<meta http-equiv="refresh" content="0;url={}" />'.format(self.path))
-				self.wfile.write('  </head>')
-				self.wfile.write('</html>')
+				self.wfile.write('<html>'.encode())
+				self.wfile.write('  <head>'.encode())
+				self.wfile.write('		<meta http-equiv="refresh" content="0;url={}" />'.format(self.path).encode())
+				self.wfile.write('  </head>'.encode())
+				self.wfile.write('</html>'.encode())
 
 			if self.path.startswith("/download_tile"):
 
