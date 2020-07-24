@@ -50,16 +50,17 @@ class myHandler(BaseHTTPRequestHandler):
 			if self.path.endswith(".html"):
 				mimetype='text/html'
 				sendReply = True
-			if self.path.startswith("/update_index"):
+			if 'update_index' in self.path:
 				process_indexBR(data_folder,databaseServer,databaseName,databaseUser,databasePW,databasePort,schema)
 				self.send_response(200)
 				self.end_headers()
 				self.path="/index.html"
-				self.wfile.write('<html>')
-				self.wfile.write('  <head>')
-				self.wfile.write('		<meta http-equiv="refresh" content="0;url={}" />'.format(self.path))
-				self.wfile.write('  </head>')
-				self.wfile.write('</html>')
+				self.wfile.write('<html>'.encode())
+				self.wfile.write('  <head>'.encode())
+				self.wfile.write('		<meta http-equiv="refresh" '\
+								'content="0;url={}" />'.format(self.path).encode())
+				self.wfile.write('  </head>'.encode())
+				self.wfile.write('</html>'.encode())
 
 			if self.path.startswith("/gen_map"):
 
