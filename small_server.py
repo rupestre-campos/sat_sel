@@ -163,9 +163,9 @@ class myHandler(BaseHTTPRequestHandler):
 				#Open the static file requested and send it
 				f = open(curdir + sep + self.path)
 				self.send_response(200)
-				self.send_header('Content-type',mimetype)
+				self.send_header('Content-type'.encode(),mimetype.encode())
 				self.end_headers()
-				self.wfile.write(f.read())
+				self.wfile.write(f.read().encode())
 				f.close()
 			return
 
