@@ -21,7 +21,7 @@ def download_index(url,out_index):
     call('python "./gsutil/gsutil.py" -q cp -r {} {}'.format(url,out_index),shell=True)
 
 
-def process_indexBR(data_folder,host,db,usr,pw):
+def process_indexBR(data_folder,host,db,usr,pw,port,schema):
     out_index = os.path.join(data_folder,'index')
     url = 'gs://gcp-public-data-sentinel-2/index.csv.gz'
 
@@ -30,11 +30,11 @@ def process_indexBR(data_folder,host,db,usr,pw):
     f = open(index_csv)
 
 
-    connString = "PG: host=%s dbname=%s user=%s password=%s" %(host,db,usr,pw)
+    connString = "PG: host=%s dbname=%s user=%s password=%s port=%s" %(host,db,usr,pw,port)
 
     conn = ogr.Open(connString)
 
-    satLay = conn.GetLayer('monitoramento_kfw.grid_sat')
+    satLay = conn.GetLayer('{}.grid_sat'.format(schema))
 
     satLay.SetAttributeFilter("sat = 'SENTINEL'")
     sentinelBR = {}

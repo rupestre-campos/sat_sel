@@ -42,7 +42,7 @@ def get_layers_from_search(conn,schema,uf,shp_folder):
 def create_grid_sat_shp(shp_folder,satLay,multi):
     output = os.path.join(shp_folder,'sat.shp')
     if os.path.isfile(output):
-        call('rm {}'.format(output),shell=True)
+        os.remove(output)
     drv = ogr.GetDriverByName("ESRI Shapefile")
     out_ds = drv.CreateDataSource(output)
     out_lyr = out_ds.CreateLayer(output, satLay.GetSpatialRef(),satLay.GetGeomType())
@@ -489,10 +489,6 @@ def make_leaflet_page(geojson_grid,output_html_path,loc,uf):
         n+= 1
 
     tag_script.string = '\n'.join(tag_list[1:-1])
-
-
-
-
 
     with open(output_html_path, "wb") as f_output:
         f_output.write(soup.prettify("utf-8"))
