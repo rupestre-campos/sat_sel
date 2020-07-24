@@ -1,5 +1,5 @@
-from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
-from SocketServer import ThreadingMixIn
+from http.server import BaseHTTPRequestHandler,HTTPServer
+from socketserver import ThreadingMixIn
 import threading
 from os import curdir, sep
 import urlparse
@@ -64,7 +64,7 @@ class myHandler(BaseHTTPRequestHandler):
 					#sat = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('sat', None)
 				uf = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('uf', None)
 					#ar_cad = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('arcad', None)
-				print uf#,ar_cad
+				print( uf)#,ar_cad
 
 
 				connString = "PG: host=%s dbname=%s user=%s password=%s port=%s" %(databaseServer,databaseName,databaseUser,databasePW,databasePort)
@@ -131,13 +131,13 @@ class myHandler(BaseHTTPRequestHandler):
 					self.send_error(404,'Not any image found, try again')
 
 			if self.path.startswith("/fulldownload"):
-				print self.path
+				print( self.path)
 				uf = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('uf', None)
 				tile_id = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('tile_id', None)
 				db_col = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('db_col', None)
 				selected_imgs = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('images', None)
 				selected_imgs = selected_imgs[0].split(',')
-				print tile_id,selected_imgs,uf,db_col
+				print (tile_id,selected_imgs,uf,db_col)
 				connString = "PG: host=%s dbname=%s user=%s password=%s port=%s" %(databaseServer,databaseName,databaseUser,databasePW,databasePort)
 				conn = ogr.Open(connString,1)
 				satLay = conn.GetLayer('{}.grid_sat'.format(schema))
@@ -186,16 +186,16 @@ def main():
 		#Create a web server and define the handler to manage the
 		#incoming request
 		server = HTTPServer(('', PORT_NUMBER), myHandler)
-		print 'Started httpserver on port ' , PORT_NUMBER
+		print ('Started httpserver on port ' , PORT_NUMBER)
 
 		#Wait forever for incoming htto requests
 		server.serve_forever()
 
 	except KeyboardInterrupt:
-		print '^C received, shutting down the web server'
+		print ('^C received, shutting down the web server')
 		server.socket.close()
 
 if __name__ == "__main__":
     server = ThreadedHTTPServer(('', PORT_NUMBER), myHandler)
-    print 'Starting server, use <Ctrl-C> to stop'
+    print ('Starting server, use <Ctrl-C> to stop')
     server.serve_forever()
