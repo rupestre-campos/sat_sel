@@ -51,6 +51,7 @@ class myHandler(BaseHTTPRequestHandler):
 				mimetype='text/html'
 				sendReply = True
 			if 'update_index' in self.path:
+				print('updating')
 				process_indexBR(data_folder,databaseServer,databaseName,databaseUser,databasePW,databasePort,schema)
 				self.send_response(200)
 				self.end_headers()
