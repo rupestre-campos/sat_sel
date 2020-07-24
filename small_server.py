@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler,HTTPServer
 from socketserver import ThreadingMixIn
 import threading
 from os import curdir, sep
-import urlparse
+from urllib import parse
 from download_sentinel import downloadSentinel
 from create_leaflet_raster import preview_to_new_map
 from paralel_reproject import paralel_img_processing
@@ -62,7 +62,7 @@ class myHandler(BaseHTTPRequestHandler):
 			if self.path.startswith("/gen_map"):
 
 					#sat = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('sat', None)
-				uf = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('uf', None)
+				uf = parse.parse_qs(parse.urlparse(self.path).query).get('uf', None)
 					#ar_cad = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('arcad', None)
 				print( uf)#,ar_cad
 
@@ -85,13 +85,13 @@ class myHandler(BaseHTTPRequestHandler):
 
 			if self.path.startswith("/download_tile"):
 
-				tile_id = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('tile_id', None)
-				pre_fix_date = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('f_date', None)
-				initial_date = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('initial_date', None)
-				final_date = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('final_date', None)
-				max_cloud = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('max_cloud', None)
-				max_tile = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('max_tile', None)
-				uf = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('uf', None)
+				tile_id = parse.parse_qs(parse.urlparse(self.path).query).get('tile_id', None)
+				pre_fix_date = parse.parse_qs(parse.urlparse(self.path).query).get('f_date', None)
+				initial_date = parse.parse_qs(parse.urlparse(self.path).query).get('initial_date', None)
+				final_date = parse.parse_qs(parse.urlparse(self.path).query).get('final_date', None)
+				max_cloud = parse.parse_qs(parse.urlparse(self.path).query).get('max_cloud', None)
+				max_tile = parse.parse_qs(parse.urlparse(self.path).query).get('max_tile', None)
+				uf = parse.parse_qs(parse.urlparse(self.path).query).get('uf', None)
 				outfolder= os.path.join(data_folder,'preview')
 				print('got {} {} {} {} {} {} {}'.format(tile_id,pre_fix_date,initial_date,final_date,max_cloud,max_tile,uf))
 				if pre_fix_date[0] == "2017":
@@ -132,10 +132,10 @@ class myHandler(BaseHTTPRequestHandler):
 
 			if self.path.startswith("/fulldownload"):
 				print( self.path)
-				uf = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('uf', None)
-				tile_id = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('tile_id', None)
-				db_col = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('db_col', None)
-				selected_imgs = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('images', None)
+				uf = parse.parse_qs(parse.urlparse(self.path).query).get('uf', None)
+				tile_id = parse.parse_qs(parse.urlparse(self.path).query).get('tile_id', None)
+				db_col = parse.parse_qs(parse.urlparse(self.path).query).get('db_col', None)
+				selected_imgs = parse.parse_qs(parse.urlparse(self.path).query).get('images', None)
 				selected_imgs = selected_imgs[0].split(',')
 				print (tile_id,selected_imgs,uf,db_col)
 				connString = "PG: host=%s dbname=%s user=%s password=%s port=%s" %(databaseServer,databaseName,databaseUser,databasePW,databasePort)
