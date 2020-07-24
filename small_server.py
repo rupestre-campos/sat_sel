@@ -196,6 +196,7 @@ def main():
 		server.socket.close()
 
 if __name__ == "__main__":
-    server = ThreadedHTTPServer(('', PORT_NUMBER), myHandler)
-    print ('Starting server, use <Ctrl-C> to stop')
-    server.serve_forever()
+    main()
+    #server = ThreadedHTTPServer(('', PORT_NUMBER), myHandler)
+    #print ('Starting server, use <Ctrl-C> to stop')
+    #server.serve_forever()
