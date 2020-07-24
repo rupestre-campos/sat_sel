@@ -324,7 +324,7 @@ def make_leaflet_page(geojson_grid,output_html_path,loc,uf):
         print(tileId)
         fg.add_child(folium.Polygon(locations=coords,fill=True,popup=(folium.Popup(tileId))))
     '''
-
+	print(loc)
     m = folium.Map(location=[ loc[1], loc[0]],height='70%',tiles='Stamen Toner',zoom_start=6)
     #if not geojson_arcad == None:
     #    geojson = folium.GeoJson(geojson_arcad,name='area cadastravel')
@@ -349,6 +349,7 @@ def make_leaflet_page(geojson_grid,output_html_path,loc,uf):
     with open(output_html_path) as html:
         soup = Soup(html, 'html.parser')
     map_number = soup.find_all("div", {"class": "folium-map"})
+    print(map_number)
     map_number = map_number[0].get('id')
 
     tag = soup.body
