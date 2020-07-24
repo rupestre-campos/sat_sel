@@ -18,7 +18,7 @@ def extract_gz(out_index):
     return out_index
 
 def download_index(url,out_index):
-    call('python "./gsutil/gsutil.py" -q cp -r {} {}'.format(url,out_index),shell=True)
+    call('python3 "./gsutil/gsutil.py" -q cp -r {} {}'.format(url,out_index),shell=True)
 
 
 def process_indexBR(data_folder,host,db,usr,pw,port,schema):
