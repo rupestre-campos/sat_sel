@@ -19,10 +19,11 @@ databasePW = "garrafadecafe"
 
 databaseServer = "177.105.35.20"
 databaseName = "equipe_geo"
+databasePort = 5433
 
-schema = 'monitoramento_kfw'
+schema = 'sat_sel'
 
-data_folder = '/home/rupestre/IMG_DOWNLOAD'
+data_folder = '/media/rupestre/DADOS/img_download'
 shp_folder = os.path.join(data_folder,'shp')
 
 PORT_NUMBER = 8080
@@ -48,7 +49,7 @@ class myHandler(BaseHTTPRequestHandler):
 				mimetype='text/html'
 				sendReply = True
 			if self.path.startswith("/update_index"):
-				process_indexBR(data_folder,databaseServer,databaseName,databaseUser,databasePW)
+				process_indexBR(data_folder,databaseServer,databaseName,databaseUser,databasePW,databasePort,schema)
 				self.send_response(200)
 				self.end_headers()
 				self.path="/index.html"
@@ -66,7 +67,7 @@ class myHandler(BaseHTTPRequestHandler):
 				print uf#,ar_cad
 
 
-				connString = "PG: host=%s dbname=%s user=%s password=%s" %(databaseServer,databaseName,databaseUser,databasePW)
+				connString = "PG: host=%s dbname=%s user=%s password=%s port=%s" %(databaseServer,databaseName,databaseUser,databasePW,databasePort)
 				conn = ogr.Open(connString)
 				satLay,multi,loc = get_layers_from_search(conn,schema,uf,shp_folder)
 				create_grid_sat_shp(shp_folder,satLay,multi)
@@ -137,7 +138,7 @@ class myHandler(BaseHTTPRequestHandler):
 				selected_imgs = urlparse.parse_qs(urlparse.urlparse(self.path).query).get('images', None)
 				selected_imgs = selected_imgs[0].split(',')
 				print tile_id,selected_imgs,uf,db_col
-				connString = "PG: host=%s dbname=%s user=%s password=%s" %(databaseServer,databaseName,databaseUser,databasePW)
+				connString = "PG: host=%s dbname=%s user=%s password=%s port=%s" %(databaseServer,databaseName,databaseUser,databasePW,databasePort)
 				conn = ogr.Open(connString,1)
 				satLay = conn.GetLayer('{}.grid_sat'.format(schema))
 				satLay.SetAttributeFilter("sat = 'SENTINEL' AND tile_id = '{}'".format(tile_id[0]))
