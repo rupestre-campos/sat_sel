@@ -17,9 +17,9 @@ pr = 4
 databaseUser = input('enter DB User: ')
 databasePW = getpass('enter DB Password: ')
 
-databaseServer = "177.105.35.20"
+databaseServer = "localhost"
 databaseName = "equipe_geo"
-databasePort = 5433
+databasePort = 5432
 
 schema = 'sat_sel'
 
@@ -28,7 +28,7 @@ shp_folder = os.path.join(data_folder,'shp')
 if not os.path.isdir(shp_folder):
 	os.mkdir(shp_folder)
 
-PORT_NUMBER = 8080
+PORT_NUMBER = 8000
 
 
 #This class will handles any incoming request from
